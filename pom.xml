@@ -30,7 +30,15 @@
 
     </dependencies>
     <dependencyManagement>
+
         <dependencies>
+<!--        valid验证-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
 <!--            端点健康检测-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
