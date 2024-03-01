@@ -11,6 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
 /**
  * <p>
  * 权限表
@@ -29,6 +33,7 @@ public class Permission implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
+    @Null
     private Integer id;
 
     @ApiModelProperty(value = "角色ID")
@@ -38,12 +43,15 @@ public class Permission implements Serializable {
     private String permission;
 
     @ApiModelProperty(value = "创建时间")
+    @Past
     private LocalDateTime addTime;
 
     @ApiModelProperty(value = "更新时间")
+    @Past
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "逻辑删除")
+    @Pattern(regexp = "^[01]$",message = "逻辑删除参数不正确")
     private Boolean deleted;
 
 

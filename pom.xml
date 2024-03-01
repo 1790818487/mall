@@ -4,9 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dawn</groupId>
     <artifactId>mall</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>mall-core</module>
+        <module>mall-server</module>
     </modules>
     <name>mall</name>
     <description>mall</description>
