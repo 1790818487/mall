@@ -25,7 +25,7 @@ public class SpringBootConfig {
      */
     @Bean
     public Docket docket(){
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_12)
                 .groupName("商城系统api接口");
     }
 

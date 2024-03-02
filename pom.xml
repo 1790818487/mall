@@ -6,11 +6,15 @@
     <artifactId>mall</artifactId>
     <version>1.0.0</version>
     <modules>
-        <module>mall-core</module>
+        <module>mall-common</module>
         <module>mall-server</module>
+        <module>mall-system</module>
+        <module>mall-common</module>
     </modules>
     <name>mall</name>
-    <description>mall</description>
+    <description>
+        管理项目依赖版本
+    </description>
 
     <packaging>pom</packaging>
 

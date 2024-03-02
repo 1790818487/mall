@@ -1,4 +1,4 @@
-package com.dawn.core.entity;
+package com.dawn.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -11,14 +11,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 /**
  * <p>
- * 角色表
+ * 权限表
  * </p>
  *
  * @author Night
@@ -27,9 +26,9 @@ import javax.validation.constraints.Pattern;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("litemall_role")
-@ApiModel(value="Role对象", description="角色表")
-public class Role implements Serializable {
+@TableName("litemall_permission")
+@ApiModel(value="Permission对象", description="权限表")
+public class Permission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,16 +36,11 @@ public class Role implements Serializable {
     @Null
     private Integer id;
 
-    @ApiModelProperty(value = "角色名称")
-    @NotBlank(message = "找好名称标识不能为空")
-    private String name;
+    @ApiModelProperty(value = "角色ID")
+    private Integer roleId;
 
-    @ApiModelProperty(value = "角色描述")
-    private String desc;
-
-    @ApiModelProperty(value = "是否启用")
-    @Pattern(regexp = "^[01]$",message = "是否启用账户参数不正确")
-    private Boolean enabled;
+    @ApiModelProperty(value = "权限")
+    private String permission;
 
     @ApiModelProperty(value = "创建时间")
     @Past
@@ -57,7 +51,7 @@ public class Role implements Serializable {
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "逻辑删除")
-    @Pattern(regexp = "^[01]$",message = "是否删除账户的参数不正确")
+    @Pattern(regexp = "^[01]$",message = "逻辑删除参数不正确")
     private Boolean deleted;
 
 

@@ -18,16 +18,30 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-<!--        导入core模块-->
+<!--        用来开启端点监测-->
         <dependency>
-            <groupId>com.dawn.core</groupId>
-            <artifactId>mall-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+<!--        解决aop的报错-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+<!--        导入system模块-->
+        <dependency>
+            <groupId>com.dawn</groupId>
+            <artifactId>mall-system</artifactId>
             <version>1.0.0</version>
         </dependency>
+
     </dependencies>
 </project>

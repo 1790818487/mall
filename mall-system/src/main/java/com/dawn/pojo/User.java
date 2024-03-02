@@ -1,4 +1,4 @@
-package com.dawn.core.entity;
+package com.dawn.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
@@ -25,8 +24,8 @@ import javax.validation.constraints.Pattern;
  * 用户表
  * </p>
  *
- * @author Night
- * @since 2024-02-29
+ * @author 黎明
+ * @since 2024-03-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -106,5 +105,6 @@ public class User implements Serializable {
      * 用来做微信分组的验证开启
      */
     public interface WXLogin{}
+
 
 }
