@@ -1,4 +1,4 @@
-package com.dawn.controller;
+package com.dawn.controller.litemalluser;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

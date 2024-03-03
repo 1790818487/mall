@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
@@ -28,7 +29,10 @@ import java.util.stream.Collectors;
 @EnableAspectJAutoProxy(exposeProxy = true)
 @MapperScan("com.dawn.mapper")
 public class SpringBootConfig {
-
+    /**
+     * 这个bean的注册用来解决报错的，不能动
+     * @return
+     */
     @Bean
     public static BeanPostProcessor springfoxHandlerProviderBeanPostProcessor() {
         return new BeanPostProcessor() {
