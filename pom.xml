@@ -28,16 +28,25 @@
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <hutool.version>5.8.25</hutool.version>
         <swagger.version>3.0.0</swagger.version>
+        <shiro.version>1.9.0</shiro.version>
 <!--        <security.version>2.7.18</security.version>-->
 <!--        <actuator.version>2.7.18</actuator.version>-->
     </properties>
     <dependencies>
 
+
     </dependencies>
     <dependencyManagement>
 
         <dependencies>
-<!--        valid验证-->
+<!--            shiro验证依赖-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring-boot-starter</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
+            <!--        valid验证-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-validation</artifactId>

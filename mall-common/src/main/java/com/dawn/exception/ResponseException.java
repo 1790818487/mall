@@ -3,7 +3,6 @@ package com.dawn.exception;
 
 import com.dawn.util.ResponseUtil;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,12 +20,6 @@ public class ResponseException {
     @ResponseBody
     public Object CommonExceptionHandler(Exception e) {
         return ResponseUtil.serious();
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    @ResponseBody
-    public Object CommonExceptionHandler(UsernameNotFoundException e) {
-        return ResponseUtil.fail(502,e.getMessage());
     }
 
     //处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常，详情继续往下看代码
