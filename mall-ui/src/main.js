@@ -5,7 +5,6 @@ import 'element-ui/lib/theme-chalk/index.css' // 引入ElementUI的样式
 import axios from "axios";
 import Router from "vue-router"
 
-import ErrorPage from "./components/ErrorPage/ErrorPage"
 import LoginPage from "./components/LoginPage/LoginPage"
 
 // 安装ElementUI
