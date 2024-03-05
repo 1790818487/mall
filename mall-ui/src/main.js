@@ -16,8 +16,7 @@ Vue.use(Router)
 // 配置路由
 const routes = [
     {path: '/', redirect:'/login'},
-    {path: '/login', component: LoginPage},
-    {path: '/404', component: ErrorPage}
+    {path: '/login', component: LoginPage}
     // 其他路由配置...
 ]
 
@@ -28,7 +27,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (to.matched.length === 0) {  // 如果未匹配到路由
         // from.name ? next({name: from.name}) :
-            next('/404')
+        // router.replace('/404.html')
+        // history.pushState(404,'资源未找到','/404.html')
+        window.location.href='/404.html'
     } else {
         next()  // 如果匹配到正确跳转
     }
