@@ -19,6 +19,17 @@
     </properties>
 
     <dependencies>
+<!--        json-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+<!--        shiro集成-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring-boot-starter</artifactId>
+        </dependency>
 
 <!--        web启动器，只用来防止编译报错的-->
         <dependency>
@@ -56,5 +67,10 @@
             <artifactId>springfox-boot-starter</artifactId>
         </dependency>
 
+<!--        hutool的工具类-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
     </dependencies>
 </project>

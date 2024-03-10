@@ -1,10 +1,10 @@
 package com.dawn.controller.litemalluser;
 
 import com.dawn.pojo.User;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @PostMapping("login")
-    public String userLogin(User user){
+    @RequiresRoles("admin")
+    public String userLogin(@RequestBody User user){
         return "success";
     }
 }

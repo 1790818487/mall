@@ -5,7 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css' // 引入ElementUI的样式
 import axios from "axios";
 import Router from "vue-router"
 
-import LoginPage from "./components/LoginPage/LoginPage"
+import LoginPage from "@/views/LoginPage/LoginPage"
 
 // 安装ElementUI
 Vue.use(ElementUI)
@@ -20,6 +20,7 @@ const routes = [
 ]
 
 const router = new Router({
+    mode:'history',
     routes
 })
 

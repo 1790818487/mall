@@ -30,6 +30,7 @@
         <swagger.version>3.0.0</swagger.version>
         <shiro.version>1.9.0</shiro.version>
         <druid.version>1.2.21</druid.version>
+        <redis.version>2.7.18</redis.version>
 <!--        <security.version>2.7.18</security.version>-->
 <!--        <actuator.version>2.7.18</actuator.version>-->
     </properties>
@@ -40,6 +41,21 @@
     <dependencyManagement>
 
         <dependencies>
+
+<!--            集成redis-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
+            </dependency>
+
+<!--            json转换-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.83</version>
+            </dependency>
+
 <!--            druid依赖-->
             <dependency>
                 <groupId>com.alibaba</groupId>
