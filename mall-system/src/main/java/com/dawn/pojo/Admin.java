@@ -11,6 +11,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 /**
  * <p>
  * 管理员表
@@ -32,9 +35,13 @@ public class Admin implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "管理员名称")
+    @NotBlank(message = "管理员名称不能为空")
+    @Pattern(regexp = "^[a-zA-Z0-9]{5,11}$",message = "账号含有非法字符")
     private String username;
 
     @ApiModelProperty(value = "管理员密码")
+    @NotBlank(message ="密码不能为空")
+    @Pattern(regexp = "^[a-zA-Z0-9.@#_]{6,}$",message = "密码格式不支持")
     private String password;
 
     @ApiModelProperty(value = "最近一次登录IP地址")
