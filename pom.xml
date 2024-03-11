@@ -10,6 +10,7 @@
         <module>mall-server</module>
         <module>mall-system</module>
         <module>mall-common</module>
+        <module>mall-framework</module>
     </modules>
     <name>mall</name>
     <description>
