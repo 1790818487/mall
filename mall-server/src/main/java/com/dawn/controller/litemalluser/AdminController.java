@@ -12,7 +12,6 @@ import com.dawn.util.BcryptUtil;
 import com.dawn.util.IPAddressUtil;
 import com.dawn.util.R;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,12 +49,13 @@ public class AdminController {
     public R userLogin(@RequestBody @Validated LoginDto dto) {
 
         Subject subject = SecurityUtils.getSubject();
-        AuthenticationToken token = new UsernamePasswordToken(
+        UsernamePasswordToken token = new UsernamePasswordToken(
                 dto.getUsername(),
                 dto.getPassword(),
                 dto.isRememberMe(),
                 dto.getHost()
         );
+        System.out.println(token.getPassword());
         try {
             subject.login(token);
         } catch (IncorrectCredentialsException e) {
@@ -99,8 +100,8 @@ public class AdminController {
         admin.setLastLoginIp(IPAddressUtil.getIpAddr(httpServletRequest));
         admin.setAddTime(LocalDateTime.now());
         admin.setDeleted(false);
-        if (registerDto.getIds() != null && registerDto.getIds().size() != 0)
-            admin.setRoleIds(registerDto.getIds().toString());
+        if (registerDto.getIds() != null && registerDto.getIds().length != 0)
+            admin.setRoleIds(Arrays.toString(registerDto.getIds()));
 
         //保存
         adminService.save(admin);
@@ -109,7 +110,7 @@ public class AdminController {
 
     //查询所有用户
     @GetMapping("query")
-    @RequiresRoles("admin")
+    @RequiresRoles("超级管理员")
     public R findAllUser() {
         List<Admin> list = adminService.list();
         return R.success(list);

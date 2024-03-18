@@ -17,6 +17,7 @@ public enum ResponseEnum {
     ACCOUNT_NOT_ENABLE(405,"账号未激活"),
     ACCOUNT_EXISTS(406,"账号已经存在"),
     ACCOUNT_NOT_EXISTS(407,"该用户不存在"),
+    ACCOUNT_NOT_ROLE(408,"该账户无任何权限,请联系管理员确认"),
 
 
     //用户访问的时候的权限的控制返回枚举

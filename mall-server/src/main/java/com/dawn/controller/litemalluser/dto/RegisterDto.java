@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
 @Data
 public class RegisterDto {
@@ -16,5 +15,5 @@ public class RegisterDto {
     @Pattern(regexp = "^[0-9a-zA-Z@_#]{6,}$",message = "密码格式不正确")
     private String password;
 
-    private List<Integer> ids;
+    private Integer[] ids;
 }

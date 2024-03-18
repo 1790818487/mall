@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
-public class ShiroConfig {
+public class SpringShiroConfig {
 
     //通过调用Initializable.init()和Destroyable.destroy()方法,从而去管理shiro bean生命周期
     @Bean
