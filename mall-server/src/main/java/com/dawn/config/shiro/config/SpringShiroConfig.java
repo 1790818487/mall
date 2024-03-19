@@ -1,6 +1,5 @@
 package com.dawn.config.shiro.config;
 
-import com.dawn.config.shiro.filter.JwtFilter;
 import com.dawn.config.shiro.realm.AdminRealm;
 import com.dawn.config.shiro.realm.CustomCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -75,18 +72,24 @@ public class SpringShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
 //        //设置自定义过滤
-        HashMap<String, Filter> stringFilterHashMap = new HashMap<>();
-        stringFilterHashMap.put("jwt", new JwtFilter());
-        shiroFilterFactoryBean.setFilters(stringFilterHashMap);
+//        HashMap<String, Filter> stringFilterHashMap = new HashMap<>();
+//        stringFilterHashMap.put("jwt", new JwtFilter());
+//        shiroFilterFactoryBean.setFilters(stringFilterHashMap);
 
         Map<String, String> map = new LinkedHashMap<>();
         // 有先后顺序
         map.put("/admin/login", "anon");      // 允许匿名访问
         map.put("/admin/register", "anon");      // 允许匿名访问
-        map.put("/**", "jwt");        // 访问我自定义的过滤器
+        map.put("/admin/index", "anon");      // 允许匿名访问
+        map.put("/admin/401", "anon");      // 允许匿名访问
+        map.put("/admin/403", "anon");      // 允许匿名访问
+
+        map.put("/**", "authc");        // 访问我自定义的过滤器
+
+        shiroFilterFactoryBean.setSuccessUrl("/admin/index");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/admin/403");
+        shiroFilterFactoryBean.setLoginUrl("/admin/401");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-
-
         return shiroFilterFactoryBean;
     }
 
@@ -104,7 +107,7 @@ public class SpringShiroConfig {
     }
 
     @Bean
-    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;

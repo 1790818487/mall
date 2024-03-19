@@ -12,8 +12,10 @@ public enum ResponseEnum {
     LOGIN_SUCCESS(200,"登录成功"),
     SUCCESS_REGISTER(200,"注册成功"),
     USER_UN_LOGIN(401,"用户未登录"),
+
     USER_PASSWORD_ERROR(402,"账号或密码错误,请重试"),
     USER_UN_PERMISSION(403,"用户无权限,请联系管理员"),
+
     ACCOUNT_NOT_ENABLE(405,"账号未激活"),
     ACCOUNT_EXISTS(406,"账号已经存在"),
     ACCOUNT_NOT_EXISTS(407,"该用户不存在"),

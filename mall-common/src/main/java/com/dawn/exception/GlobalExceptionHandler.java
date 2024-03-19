@@ -3,8 +3,6 @@ package com.dawn.exception;
 
 import com.dawn.enums.login.ResponseEnum;
 import com.dawn.util.R;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,12 +25,12 @@ public class GlobalExceptionHandler {
     }
 
     //处理shiro认证失败抛出的异常
-    @ExceptionHandler(UnauthenticatedException.class)
-    @ResponseBody
-    public R UnauthenticatedHandler(AuthorizationException e) {
-        e.printStackTrace();
-        return R.error(ResponseEnum.USER_UN_LOGIN);
-    }
+//    @ExceptionHandler(UnauthenticatedException.class)
+//    @ResponseBody
+//    public R UnauthenticatedHandler(AuthorizationException e) {
+//        e.printStackTrace();
+//        return R.error(ResponseEnum.USER_UN_LOGIN);
+//    }
 
     //处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常，详情继续往下看代码
     @ExceptionHandler(BindException.class)

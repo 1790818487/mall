@@ -115,4 +115,22 @@ public class AdminController {
         List<Admin> list = adminService.list();
         return R.success(list);
     }
+
+//    用户未登录
+    @GetMapping("401")
+    public R unlogin(){
+        return R.error(ResponseEnum.USER_UN_LOGIN);
+    }
+
+    //登录成功
+    @GetMapping("index")
+    public R success(){
+        return R.success();
+    }
+
+    //用户没有权限
+    @GetMapping("403")
+    public R unpermission(){
+        return R.error(ResponseEnum.USER_UN_PERMISSION);
+    }
 }
