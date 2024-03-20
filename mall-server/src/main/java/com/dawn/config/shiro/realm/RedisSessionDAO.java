@@ -10,22 +10,24 @@ import java.util.concurrent.TimeUnit;
 /**
  * 自定义session持久化实现，针对集群共享进行的Shiro 扩展
  */
+//@Component
 public class RedisSessionDAO extends CachingSessionDAO {
     //存入Redis中的SessionID的前缀
 //    private static final String PREFIX = "MALL_SHIRO_SESSION_ID";
     //有效期（后续使用时会增加时间单位，秒）
     private static final int EXPRIE = 86400; //1天
     //Redis 操作工具
-    private final RedisTemplate<Serializable, Session> redisTemplate;
+
+    private RedisTemplate<Serializable, Session> redisTemplate;
 
     //构造函数
     public RedisSessionDAO(RedisTemplate<Serializable, Session> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
-
     /**
      * shiro创建session时，将session保存到redis
+     *
      * @param session
      * @return
      */
@@ -41,6 +43,7 @@ public class RedisSessionDAO extends CachingSessionDAO {
 
     /**
      * 当用户维持会话时，刷新session的有效时间
+     *
      * @param session
      */
     @Override
@@ -53,6 +56,7 @@ public class RedisSessionDAO extends CachingSessionDAO {
 
     /**
      * 当用户注销或会话过期时，将session从redis中删除
+     *
      * @param session
      */
     @Override
@@ -66,7 +70,8 @@ public class RedisSessionDAO extends CachingSessionDAO {
     }
 
     /**
-     *  shiro通过sessionId获取Session对象，从redis中获取
+     * shiro通过sessionId获取Session对象，从redis中获取
+     *
      * @param sessionId
      * @return
      */
@@ -75,6 +80,8 @@ public class RedisSessionDAO extends CachingSessionDAO {
         if (sessionId == null) {
             return null;
         }
+        if (redisTemplate == null)
+            System.out.println("自动装配异常");
         //从Redis中读取Session对象
         Session session = redisTemplate.opsForValue().get(sessionId);
         return session;

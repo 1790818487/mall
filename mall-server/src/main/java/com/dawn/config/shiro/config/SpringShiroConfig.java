@@ -2,32 +2,36 @@ package com.dawn.config.shiro.config;
 
 import com.dawn.config.shiro.realm.AdminRealm;
 import com.dawn.config.shiro.realm.CustomCredentialsMatcher;
-import com.dawn.config.shiro.realm.CustomWebSessionManager;
 import com.dawn.config.shiro.realm.RedisSessionDAO;
 import org.apache.shiro.mgt.DefaultSecurityManager;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
 public class SpringShiroConfig {
 
-    @Autowired
-    private RedisTemplate<Serializable, Session> redisTemplate;
+    private RedisTemplate redisTemplate;
+
+    @Bean
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate redisTemplate = new RedisTemplate();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        this.redisTemplate=redisTemplate;
+        return redisTemplate;
+    }
 
     //通过调用Initializable.init()和Destroyable.destroy()方法,从而去管理shiro bean生命周期
     @Bean
@@ -35,16 +39,9 @@ public class SpringShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
-
     @Bean
-    public SessionDAO redisSessionDAO(){
+    public SessionDAO redisSessionDAO() {
         return new RedisSessionDAO(redisTemplate);
-    }
-
-    @Bean
-    public SessionManager customWebSessionManager() {
-
-        return new CustomWebSessionManager();
     }
 
 
@@ -66,8 +63,10 @@ public class SpringShiroConfig {
     public DefaultWebSecurityManager securityManager() {
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-       //使用自定义的缓存方式,即使用redis存储认证的信息
-        securityManager.setSubjectDAO(new DefaultWebSecurityManager().getSubjectDAO());
+        //使用自定义的缓存方式,即使用redis存储认证的信息
+        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
+        defaultWebSessionManager.setSessionDAO(redisSessionDAO());
+        securityManager.setSessionManager(defaultWebSessionManager);
         //使用自定义的session管理器
 //        securityManager.setSessionManager(customWebSessionManager());
 

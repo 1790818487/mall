@@ -1,7 +1,6 @@
 package com.dawn.controller.litemalluser;
 
 
-import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dawn.controller.litemalluser.dto.LoginDto;
 import com.dawn.controller.litemalluser.dto.RegisterDto;
@@ -15,12 +14,15 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,6 +47,9 @@ public class AdminController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
+    @Autowired
+    private RedisTemplate<Serializable, Session> redisTemplate;
+
     @PostMapping("login")
     public R userLogin(@RequestBody @Validated LoginDto dto) {
 
@@ -55,30 +60,23 @@ public class AdminController {
                 dto.isRememberMe(),
                 dto.getHost()
         );
-        System.out.println(token.getPassword());
+        if (redisTemplate==null)
+            return R.success("空值了");
+//        System.out.println(token.getPassword());
         try {
             subject.login(token);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
             return R.error(ResponseEnum.USER_PASSWORD_ERROR);
         }
-        //token的头部信息
-        HashMap<String, Object> headers = new HashMap<>();
-
-        //token的payload信息
-        HashMap<String, Object> payload = new HashMap<>();
-        payload.put("username", dto.getUsername());
-        payload.put("password",dto.getPassword());
-        payload.put("isRememberMe", dto.isRememberMe());
-
-        //签名
-        byte[] bytes = "mall".getBytes();
-
-        String jwtToken = JWTUtil.createToken(headers, payload, bytes);
-
+        //返回用户信息
+        System.out.println( subject.getPrincipal());
+        Admin admin = (Admin) subject.getPrincipal();
         //返回的数据
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("access_token", jwtToken);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("token",subject.getSession().getId());
+        hashMap.put("username",admin.getUsername());
+        hashMap.put("avatar",admin.getAvatar());
         return R.success(ResponseEnum.LOGIN_SUCCESS, hashMap);
     }
 

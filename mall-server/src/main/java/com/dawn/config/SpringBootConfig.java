@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 @ComponentScan({"com.dawn.config.shiro.realm","com.dawn.service"})
 //@ServletComponentScan("com.dawn.filter")
 public class SpringBootConfig {
+
+
     /**
      * 这个bean的注册用来解决报错的，不能动
      * @return
