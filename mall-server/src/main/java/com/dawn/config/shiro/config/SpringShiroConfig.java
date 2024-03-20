@@ -4,6 +4,8 @@ import com.dawn.config.shiro.realm.AdminRealm;
 import com.dawn.config.shiro.realm.CustomCredentialsMatcher;
 import com.dawn.config.shiro.realm.RedisSessionDAO;
 import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -14,8 +16,6 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,15 +23,12 @@ import java.util.Map;
 @Configuration
 public class SpringShiroConfig {
 
-    private RedisTemplate redisTemplate;
-
-    @Bean
-    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate redisTemplate = new RedisTemplate();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        this.redisTemplate=redisTemplate;
-        return redisTemplate;
-    }
+//    @Bean
+//    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+//        RedisTemplate redisTemplate = new RedisTemplate();
+//        redisTemplate.setConnectionFactory(redisConnectionFactory);
+//        return redisTemplate;
+//    }
 
     //通过调用Initializable.init()和Destroyable.destroy()方法,从而去管理shiro bean生命周期
     @Bean
@@ -41,7 +38,7 @@ public class SpringShiroConfig {
 
     @Bean
     public SessionDAO redisSessionDAO() {
-        return new RedisSessionDAO(redisTemplate);
+        return new RedisSessionDAO();
     }
 
 
@@ -63,10 +60,17 @@ public class SpringShiroConfig {
     public DefaultWebSecurityManager securityManager() {
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+
         //使用自定义的缓存方式,即使用redis存储认证的信息
         DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setSessionDAO(redisSessionDAO());
         securityManager.setSessionManager(defaultWebSessionManager);
+
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+
         //使用自定义的session管理器
 //        securityManager.setSessionManager(customWebSessionManager());
 
@@ -99,8 +103,7 @@ public class SpringShiroConfig {
         map.put("/admin/index", "anon");      // 允许匿名访问
         map.put("/admin/401", "anon");      // 允许匿名访问
         map.put("/admin/403", "anon");      // 允许匿名访问
-
-        map.put("/**", "authc");        // 访问我自定义的过滤器
+        map.put("/**", "authc");        // 访问过滤器
 
         shiroFilterFactoryBean.setSuccessUrl("/admin/index");
         shiroFilterFactoryBean.setUnauthorizedUrl("/admin/403");

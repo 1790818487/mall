@@ -2,7 +2,11 @@ package com.dawn.config.shiro.realm;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -10,19 +14,23 @@ import java.util.concurrent.TimeUnit;
 /**
  * 自定义session持久化实现，针对集群共享进行的Shiro 扩展
  */
-//@Component
+@Component
 public class RedisSessionDAO extends CachingSessionDAO {
     //存入Redis中的SessionID的前缀
 //    private static final String PREFIX = "MALL_SHIRO_SESSION_ID";
     //有效期（后续使用时会增加时间单位，秒）
     private static final int EXPRIE = 86400; //1天
-    //Redis 操作工具
 
+    //Redis 操作工具
+    @Autowired
     private RedisTemplate<Serializable, Session> redisTemplate;
 
     //构造函数
-    public RedisSessionDAO(RedisTemplate<Serializable, Session> redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    @Bean
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate redisTemplate = new RedisTemplate();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
     }
 
     /**
@@ -36,6 +44,9 @@ public class RedisSessionDAO extends CachingSessionDAO {
         //生成SessionID
         Serializable serializable = this.generateSessionId(session);
         assignSessionId(session, serializable);
+        System.out.println(
+                serializable
+        );
         //将sessionid作为Key，session作为value存入redis
         redisTemplate.opsForValue().set(serializable, session);
         return serializable;
@@ -77,6 +88,7 @@ public class RedisSessionDAO extends CachingSessionDAO {
      */
     @Override
     protected Session doReadSession(Serializable sessionId) {
+
         if (sessionId == null) {
             return null;
         }

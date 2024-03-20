@@ -82,9 +82,7 @@ public class AdminRealm extends AuthorizingRealm {
                         .in(Role::getId, roleIds)
                         .select(Role::getName)
         ).forEach(
-                role -> {
-                    roles.add(role.getName());
-                }
+                role -> roles.add(role.getName())
         );
         authorizationInfo.setRoles(roles);
 
@@ -95,9 +93,7 @@ public class AdminRealm extends AuthorizingRealm {
                         .in(Permission::getRoleId, roleIds)
                         .select(Permission::getPermission)
         ).forEach(
-                permission -> {
-                    permissions.add(permission.getPermission());
-                }
+                permission -> permissions.add(permission.getPermission())
         );
 
         authorizationInfo.setStringPermissions(permissions);

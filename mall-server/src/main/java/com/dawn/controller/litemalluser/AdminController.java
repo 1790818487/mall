@@ -70,8 +70,10 @@ public class AdminController {
             return R.error(ResponseEnum.USER_PASSWORD_ERROR);
         }
         //返回用户信息
-        System.out.println( subject.getPrincipal());
-        Admin admin = (Admin) subject.getPrincipal();
+        Admin admin = adminService.getOne(
+                Wrappers.lambdaQuery(Admin.class)
+                        .eq(Admin::getUsername, subject.getPrincipal().toString())
+        );
         //返回的数据
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("token",subject.getSession().getId());
