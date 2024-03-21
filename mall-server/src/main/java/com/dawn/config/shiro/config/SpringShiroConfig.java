@@ -2,6 +2,7 @@ package com.dawn.config.shiro.config;
 
 import com.dawn.config.shiro.realm.AdminRealm;
 import com.dawn.config.shiro.realm.CustomCredentialsMatcher;
+import com.dawn.config.shiro.realm.CustomWebSessionManager;
 import com.dawn.config.shiro.realm.RedisSessionDAO;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -22,13 +23,6 @@ import java.util.Map;
 
 @Configuration
 public class SpringShiroConfig {
-
-//    @Bean
-//    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        RedisTemplate redisTemplate = new RedisTemplate();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//        return redisTemplate;
-//    }
 
     //通过调用Initializable.init()和Destroyable.destroy()方法,从而去管理shiro bean生命周期
     @Bean
@@ -56,23 +50,32 @@ public class SpringShiroConfig {
         return new CustomCredentialsMatcher();
     }
 
+    //自定义的过滤器,为了实现从header中得到token
+
+    @Bean
+    public CustomWebSessionManager customWebSessionManager() {
+        return new CustomWebSessionManager();
+    }
+
+
     @Bean
     public DefaultWebSecurityManager securityManager() {
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         //使用自定义的缓存方式,即使用redis存储认证的信息
-        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
+        //使用自定义的session管理器
+        //禁用Cookie
+        DefaultWebSessionManager defaultWebSessionManager = customWebSessionManager();
         defaultWebSessionManager.setSessionDAO(redisSessionDAO());
         securityManager.setSessionManager(defaultWebSessionManager);
 
+        //关闭session
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
 
-        //使用自定义的session管理器
-//        securityManager.setSessionManager(customWebSessionManager());
 
         //设置密码匹配器
         securityManager.setRealm(userRealm());
@@ -91,11 +94,6 @@ public class SpringShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
-//        //设置自定义过滤
-//        HashMap<String, Filter> stringFilterHashMap = new HashMap<>();
-//        stringFilterHashMap.put("jwt", new JwtFilter());
-//        shiroFilterFactoryBean.setFilters(stringFilterHashMap);
-
         Map<String, String> map = new LinkedHashMap<>();
         // 有先后顺序
         map.put("/admin/login", "anon");      // 允许匿名访问
@@ -103,6 +101,7 @@ public class SpringShiroConfig {
         map.put("/admin/index", "anon");      // 允许匿名访问
         map.put("/admin/401", "anon");      // 允许匿名访问
         map.put("/admin/403", "anon");      // 允许匿名访问
+        map.put("/admin/exit", "logout");      //用户登出接口
         map.put("/**", "authc");        // 访问过滤器
 
         shiroFilterFactoryBean.setSuccessUrl("/admin/index");

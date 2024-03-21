@@ -133,4 +133,10 @@ public class AdminController {
     public R unpermission(){
         return R.error(ResponseEnum.USER_UN_PERMISSION);
     }
+
+    //用户登出
+    @GetMapping("exit")
+    public R logout(){
+        return R.success(ResponseEnum.USER_LOGIN_OUT);
+    }
 }
